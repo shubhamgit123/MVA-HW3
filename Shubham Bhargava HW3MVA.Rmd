@@ -1,0 +1,110 @@
+---
+title: "Homwework3"
+author: "Shubham Bhargava"
+date: "2024-02-23"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(readxl)
+News_Website_Dataset <- read_excel("News Website Dataset.xlsx")
+#View(News_Website_Dataset)
+
+# correlation  and coefficient B/W Total_revenue and Total Sessions
+correlation_coefficient2 <- cor(News_Website_Dataset$Total_revenue, News_Website_Dataset$Total_Sessions)
+print(correlation_coefficient2)
+
+plot(News_Website_Dataset$Total_Sessions, News_Website_Dataset$Total_revenue,
+     xlab = "Total Sessions", ylab = "Total Revenue",
+     main = "Scatter Plot of Total Revenue vs. Total Sessions")
+
+abline(lm(News_Website_Dataset$Total_revenue ~ News_Website_Dataset$Total_Sessions), col = "green")
+
+```
+```{r}
+
+correlation_coefficient <- cor(News_Website_Dataset$Total_revenue, News_Website_Dataset$Avg_Session_Duration)
+
+plot(News_Website_Dataset$Avg_Session_Duration, News_Website_Dataset$Total_revenue,
+     xlab = "Average Session Duration", ylab = "Total Revenue",
+     main = "Scatter Plot of Total Revenue vs. Avg Session Duration")
+
+abline(lm(News_Website_Dataset$Total_revenue ~ News_Website_Dataset$Avg_Session_Duration), col = "purple")
+
+print(paste("Correlation Coefficient between Total Revenue and Avg Session Duration:", correlation_coefficient))
+
+```
+
+## Homework 3
+
+#### 1. Total Income by Type of Device
+
+<p> examining the total revenue mean and variance for each category of device </p>
+
+```{r}
+library(ggplot2)
+mean_revenue_device <- aggregate(Total_revenue ~ Device_Category, data = News_Website_Dataset, mean)
+variance_revenue_device <- aggregate(Total_revenue ~ Device_Category, data = News_Website_Dataset, var)
+
+print("Mean Total Revenue by Device Category")
+print(mean_revenue_device)
+print("Variance of Total Revenue by Device Category")
+print(variance_revenue_device)
+
+
+
+# Violin plot for Distribution of Total Revenue by Device Category
+ggplot(News_Website_Dataset, aes(x = Device_Category, y = Total_revenue, fill = Device_Category)) +
+  geom_violin(trim = FALSE) +
+  labs(title = "Distribution of Total Revenue by Device Category", x = "Device Category", y = "Total Revenue") +
+  theme_minimal()
+
+# Bar plot for Mean Total Revenue by Device Category
+ggplot(mean_revenue_device, aes(x = Device_Category, y = Total_revenue, fill = Device_Category)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  labs(title = "Mean Total Revenue by Device Category", x = "Device Category", y = "Mean Total Revenue") +
+  theme_minimal()
+
+# Box plot 
+ggplot(News_Website_Dataset, aes(x = Device_Category, y = Total_revenue, fill = Device_Category)) +
+  geom_boxplot() +
+  labs(title = "Total Revenue by Device Category", x = "Device Category", y = " Total Revenue") +
+  theme_minimal()
+
+
+
+```
+<p>Each category of devices' total income is broken down into its mean and variation in this analysis. We can better comprehend how income fluctuates between various device types thanks to it. One can learn more about the average revenue made by users utilizing each type of device by looking at the mean total revenue by device category. Users of the same device category can generate different amounts of revenue, as seen by the variation of total revenue by device category. The most profitable device categories and the degree to which income creation is consistent across various devices can both be determined with the aid of this analysis.</p>
+
+##### 2. Overall Revenue
+
+<p>Analyzing the univariate mean and variance of the "Total Revenue" variable</p>
+
+```{r}
+library(ggplot2)
+mean_revenue <- mean(News_Website_Dataset$Total_revenue)
+variance_revenue <- var(News_Website_Dataset$Total_revenue)
+
+print(paste("Mean for Total Revenue:", mean_revenue))
+print(paste("Variance for Total Revenue:", variance_revenue))
+
+
+# Q-Q plot for Total Revenue
+qqnorm(News_Website_Dataset$Total_revenue, main = "Q-Q Plot of Total Revenue")
+qqline(News_Website_Dataset$Total_revenue)
+
+
+#Box Plot for Total Revenue
+ggplot(News_Website_Dataset, aes(x = "", y = Total_revenue)) +
+  geom_boxplot(fill = "purple", color = "yellow") +
+  labs(title = "Box Plot of Total Revenue", x = "", y = "Total Revenue")
+
+
+```
+<p>The amount of money made on average over all dataset observations is given by the mean total revenue. A core metric of the revenue distribution is provided. The dispersal or spread of revenue values around the mean is indicated by the variance of total revenue. Revenue numbers may be more widely dispersed from the mean if the variation is higher, but they may also be more closely distributed if the variance is lower. The normal revenue amount and the variations in revenue creation are better understood thanks to this analysis..</p>
+
